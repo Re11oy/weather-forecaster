@@ -1,0 +1,12 @@
+{
+  "name": "weather-forecast",
+  "version": "1.0.0",
+  "description": "Simple weather forecast service",
+  "main": "index.js",
+  "repository": "https://github.com/Re11oy/weather-forecast",
+  "author": "Kirill Talaluev <k@talaluev.me>",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "cd server && yarn install && cd ../client && yarn install"
+  }
+}
