@@ -2,5 +2,8 @@
   "extends": [
     "config:base"
   ],
-  "assigneesFromCodeOwners": true
+  "assigneesFromCodeOwners": true,
+  "assignees": [
+    "Re11oy"
+  ]
 }
