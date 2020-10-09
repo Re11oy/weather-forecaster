@@ -1,0 +1,27 @@
+{
+  "checkingFrequencyMinutes": 1,
+  "forecastDays": 5,
+  "alerts": [
+    {
+      "city": "Helsinki",
+      "lat": 60.192059,
+      "lon": 24.945831,
+      "minTemp": 10,
+      "maxTemp": 15
+    },
+    {
+      "city": "Saint Petersburg",
+      "lat": 59.940266,
+      "lon": 30.313810,
+      "minTemp": 10,
+      "maxTemp": 15
+    },
+    {
+      "city": "Singapore",
+      "lat": 1.287953,
+      "lon": 103.851784,
+      "minTemp": 10,
+      "maxTemp": 15
+    }
+  ]
+}
