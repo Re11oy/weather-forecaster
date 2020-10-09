@@ -1,22 +1,36 @@
 import Koa from 'koa'
 import Router from 'koa-router'
+import mongoose from 'mongoose'
+import { MONGO_CONNECTION_URL } from './environment'
+import WeatherForecasts from './models/weather-forecast'
 
-function main() {
-  const PORT = process.env.PORT || 8080
-  const app = new Koa()
+function getRoutes() {
   const router = new Router()
 
-  const config = require('../../config.json')
-
-  router.get('/', ctx => {
-    ctx.body = config
+  router.get('/forecasts', async (ctx) => {
+    ctx.body = await WeatherForecasts.find()
   })
 
-  app.use(router.routes())
+  return router.routes()
+}
+
+async function main() {
+  const PORT = process.env.PORT ?? 8080
+  const app = new Koa()
+
+  await mongoose.connect(MONGO_CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+
+  app.use(getRoutes())
   app.listen(PORT)
   console.log(`🚀 Server ready at port ${PORT}`)
 }
 
 if (require.main === module) {
-  main()
+  main().catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
 }

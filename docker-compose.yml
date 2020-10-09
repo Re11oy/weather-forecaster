@@ -5,10 +5,7 @@ services:
     image: mongo:latest
     container_name: db
     restart: unless-stopped
-    env_file: .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    env_file: .env.development
     ports:
       - 27017:27017
     volumes:
