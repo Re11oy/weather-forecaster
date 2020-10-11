@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p src",
     "start": "ts-node src/server.ts",
-    "start-worker": "nodemon src/forecast-update-worker.ts",
+    "start-worker": "ts-node src/forecast-update-worker.ts",
     "watch": "nodemon src/server.ts",
     "watch-worker": "nodemon src/forecast-update-worker.ts",
     "clean": "rm build/*.*",

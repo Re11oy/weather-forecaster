@@ -1,32 +1,26 @@
-import { OpenWeatherProvider } from './providers/openweather'
-import { noopGetDailyForecastFunc } from './providers/dummy'
-import { Alert, readConfig } from './config'
 import mongoose from 'mongoose'
+
+import { OpenWeatherProvider } from './providers/openweather'
+import { dummyProvider } from './providers/dummy'
+import { Alert, readConfig } from './config'
 import WeatherForecasts, { Forecast } from './models/weather-forecast'
+import { MONGO_CONNECTION_URL, OPEN_WEATHER_API_KEY, WEATHER_PROVIDER } from './environment'
 
 export interface WeatherForecast {
   date: Date
-  currentTemp: number
-  minTemp: number
-  maxTemp: number
+  dayTemp: number
 }
 
 export interface GetDailyForecastFunc {
-  (latitude: number, longitude: number, days: number): Promise<
-    WeatherForecast[]
-  >
+  (latitude: number, longitude: number, days: number): Promise<WeatherForecast[]>
 }
 
-export interface ForecastChecker {
+export interface WeatherProvider {
   getDailyForecast: GetDailyForecastFunc
 }
 
-const dummyProvider: ForecastChecker = {
-  getDailyForecast: noopGetDailyForecastFunc,
-}
-
 async function updateWeatherForecast(
-  forecastChecker: ForecastChecker,
+  weatherProvider: WeatherProvider,
   alert: Alert,
   forecastDays = 5,
 ) {
@@ -35,7 +29,7 @@ async function updateWeatherForecast(
     forecastDays,
   })
   try {
-    const forecasts = await forecastChecker.getDailyForecast(
+    const forecasts = await weatherProvider.getDailyForecast(
       alert.lat,
       alert.lon,
       forecastDays,
@@ -47,9 +41,9 @@ async function updateWeatherForecast(
 
     const forecastsUpdate: Forecast[] = forecasts.map((item) => ({
       day: item.date,
-      temp: item.currentTemp,
-      isMaximumReached: item.maxTemp >= alert.maxTemp,
-      isMinimumReached: item.minTemp <= alert.minTemp,
+      temp: item.dayTemp,
+      isMaximumReached: item.dayTemp >= alert.maxTemp,
+      isMinimumReached: item.dayTemp <= alert.minTemp,
     }))
 
     await WeatherForecasts.findOneAndUpdate(
@@ -72,6 +66,10 @@ async function updateWeatherForecast(
   }
 }
 
+/**
+ * Remove not actual location weather alerts that not specified in config
+ * @param cities, actual list of monitoring locations
+ */
 async function purgeAlerts(cities: string[]) {
   try {
     const purgeLocations = await WeatherForecasts.find({
@@ -88,41 +86,57 @@ async function purgeAlerts(cities: string[]) {
   }
 }
 
+/**
+ * Main works forecasts update function
+ * TODO refactor to the lambda cloud function
+ * @param weatherProvider - service provide daily weather forecasts
+ */
 async function updateLocationsWeatherForecasts(
-  forecastChecker: ForecastChecker,
+  weatherProvider: WeatherProvider,
 ): Promise<void> {
-  const config = await readConfig()
+  let checkingFrequencyMinutes = 5
 
-  await Promise.all(
-    config.alerts.map((alert) =>
-      updateWeatherForecast(forecastChecker, alert, config.forecastDays),
-    ),
-  )
+  try {
+    const config = await readConfig()
+    if (config.checkingFrequencyMinutes) {
+      checkingFrequencyMinutes = config.checkingFrequencyMinutes
+    }
 
-  await purgeAlerts(config.alerts.map((alert) => alert.city))
+    await Promise.all(
+      config.alerts.map((alert) =>
+        updateWeatherForecast(weatherProvider, alert, config.forecastDays),
+      ),
+    )
+
+    await purgeAlerts(config.alerts.map((alert) => alert.city))
+  } catch (error) {
+    console.error('Error occurs during weather forecast update', error)
+  }
 
   const nextStartDate = new Date()
   nextStartDate.setMinutes(
-    nextStartDate.getMinutes() + config.checkingFrequencyMinutes,
+    nextStartDate.getMinutes() + checkingFrequencyMinutes,
   )
   console.debug(`Next update scheduled at ${nextStartDate}`)
-  setTimeout(async () => {
-    await updateLocationsWeatherForecasts(forecastChecker)
-  }, config.checkingFrequencyMinutes * 60 * 1000)
+  setTimeout(
+    () => updateLocationsWeatherForecasts(weatherProvider),
+    checkingFrequencyMinutes * 60 * 1000,
+  )
 }
 
 async function startWorker() {
-  await mongoose.connect('mongodb://localhost:27017', {
+  await mongoose.connect(MONGO_CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
 
-  const forecastChecker = process.env.PROVIDER
-    ? new OpenWeatherProvider('a681ef0c5f3bb9b882d092485bdaee4f')
-    : dummyProvider
+  const weatherProvider = WEATHER_PROVIDER === 'NOOP'
+    ? dummyProvider :
+    new OpenWeatherProvider(OPEN_WEATHER_API_KEY)
 
-  await updateLocationsWeatherForecasts(forecastChecker)
+  console.debug(`Weather forecast update worker started with provider ${WEATHER_PROVIDER}`)
+  await updateLocationsWeatherForecasts(weatherProvider)
 }
 
 if (require.main === module) {
