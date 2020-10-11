@@ -1,9 +1,7 @@
 import dotenv from 'dotenv'
-import fs from 'fs-extra'
 
-if (fs.existsSync('../.env')) {
-  dotenv.config({ path: '../.env' })
-} else {
+const result = dotenv.config()
+if (result.error) {
   console.warn(
     'Environment file ".env" not found, ".env.development" used instead',
   )

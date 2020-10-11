@@ -15,7 +15,8 @@
     "lint-fix": "yarn lint --fix",
     "prettier": "prettier 'src/*.ts' -c",
     "prettier-fix": "prettier 'src/*.ts' --write",
-    "test": "yarn jest",
+    "test": "yarn jest --testPathIgnorePatterns integration-tests",
+    "test-integration": "yarn jest src/integration-tests",
     "validate": "yarn lint && yarn prettier && yarn test"
   },
   "dependencies": {

@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
   return (
     <Main>
-      <div className="error">{errorMessage}</div>
+      {errorMessage && <div className="error">{errorMessage}</div>}
       {forecasts.map((forecast) => (
         <WeatherCard key={forecast.city} {...forecast} />
       ))}

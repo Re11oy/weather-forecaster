@@ -41,3 +41,4 @@ jobs:
         yarn prettier
       working-directory: ./client
     - run: yarn test
+    - run: ./scripts/run-integration-tests.sh
