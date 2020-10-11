@@ -7,6 +7,10 @@ import WeatherForecasts from './models/weather-forecast'
 function getRoutes() {
   const router = new Router()
 
+  router.get('/', (ctx) => {
+    ctx.status = 200
+  })
+
   router.get('/forecasts', async (ctx) => {
     ctx.body = await WeatherForecasts.find()
   })
