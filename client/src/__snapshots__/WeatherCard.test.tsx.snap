@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WeatherCard should render card with forecast 1`] = `
+<div>
+  <section
+    class="sc-bdnylx eJRQQx"
+  >
+    <div
+      class="title"
+    >
+      <span>
+        Helsinki
+      </span>
+      <div />
+    </div>
+    <div
+      class="forecasts"
+    >
+      <div
+        class=""
+      >
+        <span>
+          Sun
+        </span>
+        <span
+          class="date"
+        >
+          01 Nov
+        </span>
+        <span
+          class="temp"
+        >
+          10
+          °
+        </span>
+      </div>
+    </div>
+  </section>
+</div>
+`;
