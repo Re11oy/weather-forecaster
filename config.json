@@ -1,5 +1,5 @@
 {
-  "checkingFrequencyMinutes": 1,
+  "checkingFrequencyMinutes": 5,
   "forecastDays": 5,
   "alerts": [
     {
