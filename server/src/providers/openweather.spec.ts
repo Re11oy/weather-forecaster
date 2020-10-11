@@ -17,11 +17,9 @@ describe('OpenWeatherProvider', () => {
 
     const forecast = await provider.getDailyForecast(1,2,3)
 
-    expect(forecast.length).toEqual(8)
+    expect(forecast.length).toEqual(3)
 
     expect(forecast[0].date.getTime()).toBe(1602068400000)
-    expect(forecast[0].minTemp).toBe(298.18)
-    expect(forecast[0].maxTemp).toBe(298.8)
   })
 
   it('should correctly process API error', async () => {

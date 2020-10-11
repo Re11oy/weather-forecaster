@@ -11,3 +11,5 @@ if (fs.existsSync('../.env')) {
 }
 
 export const MONGO_CONNECTION_URL = process.env.MONGO_CONNECTION_URL ?? ''
+export const WEATHER_PROVIDER = process.env.WEATHER_PROVIDER ?? ''
+export const OPEN_WEATHER_API_KEY = process.env.OPEN_WEATHER_API_KEY ?? ''

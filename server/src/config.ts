@@ -15,7 +15,7 @@ export interface Config {
 }
 
 const defaultConfig: Config = {
-  checkingFrequencyMinutes: 0.2,
+  checkingFrequencyMinutes: 60,
   forecastDays: 5,
   alerts: [],
 }
