@@ -29,12 +29,14 @@ jobs:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
     - run: yarn install --frozen-lockfile
-    - run: |
+    - name: Run server build and lint
+      run: |
         yarn build
         yarn lint
         yarn prettier
       working-directory: ./server
-    - run: |
+    - name: Run client build and prettier
+      run: |
         yarn build
         yarn prettier
       working-directory: ./client

@@ -4,7 +4,11 @@ import { OpenWeatherProvider } from './providers/openweather'
 import { dummyProvider } from './providers/dummy'
 import { Alert, readConfig } from './config'
 import WeatherForecasts, { Forecast } from './models/weather-forecast'
-import { MONGO_CONNECTION_URL, OPEN_WEATHER_API_KEY, WEATHER_PROVIDER } from './environment'
+import {
+  MONGO_CONNECTION_URL,
+  OPEN_WEATHER_API_KEY,
+  WEATHER_PROVIDER,
+} from './environment'
 
 export interface WeatherForecast {
   date: Date
@@ -12,7 +16,9 @@ export interface WeatherForecast {
 }
 
 export interface GetDailyForecastFunc {
-  (latitude: number, longitude: number, days: number): Promise<WeatherForecast[]>
+  (latitude: number, longitude: number, days: number): Promise<
+    WeatherForecast[]
+  >
 }
 
 export interface WeatherProvider {
@@ -131,11 +137,14 @@ async function startWorker() {
     useFindAndModify: false,
   })
 
-  const weatherProvider = WEATHER_PROVIDER === 'NOOP'
-    ? dummyProvider :
-    new OpenWeatherProvider(OPEN_WEATHER_API_KEY)
+  const weatherProvider =
+    WEATHER_PROVIDER === 'NOOP'
+      ? dummyProvider
+      : new OpenWeatherProvider(OPEN_WEATHER_API_KEY)
 
-  console.debug(`Weather forecast update worker started with provider ${WEATHER_PROVIDER}`)
+  console.debug(
+    `Weather forecast update worker started with provider ${WEATHER_PROVIDER}`,
+  )
   await updateLocationsWeatherForecasts(weatherProvider)
 }
 
