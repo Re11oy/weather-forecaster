@@ -6,22 +6,29 @@
       "city": "Helsinki",
       "lat": 60.192059,
       "lon": 24.945831,
-      "minTemp": 10,
-      "maxTemp": 15
+      "minTemp": 4,
+      "maxTemp": 12
     },
     {
       "city": "Saint Petersburg",
       "lat": 59.940266,
       "lon": 30.313810,
-      "minTemp": 10,
-      "maxTemp": 15
+      "minTemp": 8,
+      "maxTemp": 16
     },
     {
       "city": "Singapore",
       "lat": 1.287953,
       "lon": 103.851784,
-      "minTemp": 10,
-      "maxTemp": 15
+      "minTemp": 25,
+      "maxTemp": 28.5
+    },
+    {
+      "city": "Isachsen",
+      "lat": 78.7765,
+      "lon": -103.4932,
+      "minTemp": -16,
+      "maxTemp": 0
     }
   ]
 }
