@@ -1,25 +1,44 @@
-import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import React, { useCallback, useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { WeatherCard } from './WeatherCard'
+import { fetchWeatherForecasts, LocationForecast } from './api'
 
-function App() {
+const Main = styled.section`
+  display: flex;
+  flex-direction: column;
+
+  .error {
+    margin: 1rem auto;
+    border-radius: 3px;
+    background-color: #fff;
+    color: #c06c84;
+    box-shadow: 1px 1px 4px #c06c84;
+    padding: 1rem 2rem;
+  }
+`
+
+const App: React.FC = () => {
+  const [forecasts, setForecasts] = useState<LocationForecast[]>([])
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const setError = useCallback((error: Error) => {
+    setErrorMessage(error.message)
+  }, [])
+
+  useEffect(() => {
+    fetchWeatherForecasts().then((forecasts) => {
+      setForecasts(forecasts)
+      setErrorMessage('')
+    }, setError)
+  }, [setError])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Main>
+      <div className="error">{errorMessage}</div>
+      {forecasts.map((forecast) => (
+        <WeatherCard key={forecast.city} {...forecast} />
+      ))}
+    </Main>
   )
 }
 
