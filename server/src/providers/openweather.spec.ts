@@ -19,7 +19,7 @@ describe('OpenWeatherProvider', () => {
 
     expect(forecast.length).toEqual(3)
 
-    expect(forecast[0].date.getTime()).toBe(1602068400000)
+    expect(forecast[0].date.getTime()).toBe(1602154800000)
   })
 
   it('should correctly process API error', async () => {

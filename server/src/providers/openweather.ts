@@ -49,9 +49,9 @@ export class OpenWeatherProvider implements WeatherProvider {
     }
 
     const { daily = [] }: OneCallResponse = await response.json()
-    const endIndex = Math.min(daily.length, days)
 
-    return daily.slice(0, endIndex).map(({dt, temp}) => ({
+    // OW returns todays forecast, skip it
+    return daily.slice(1, days + 1).map(({dt, temp}) => ({
       date: new Date(dt * 1000),
       dayTemp: temp.day,
     }))

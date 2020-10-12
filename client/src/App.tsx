@@ -43,16 +43,22 @@ const App: React.FC = () => {
 
   return (
     <Main>
-      {loading && <div className="alert">Loading</div>}
+      {loading && <div className="alert">Loading...</div>}
       {!loading && errorMessage && (
         <div className="alert error">{errorMessage}</div>
       )}
-      {forecasts ? (
+      {forecasts.length ? (
         forecasts.map((forecast) => (
           <WeatherCard key={forecast.city} {...forecast} />
         ))
       ) : (
-        <div className="alert">Weather alerts not configured</div>
+        <div className="alert">
+          The weather will always be good
+          <span role="img" aria-label="" aria-labelledby="">
+            {' '}
+            😀
+          </span>
+        </div>
       )}
     </Main>
   )
