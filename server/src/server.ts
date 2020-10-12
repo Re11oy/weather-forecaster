@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import Koa, { Next } from 'koa'
 import Router from 'koa-router'
 import mongoose from 'mongoose'
 import { MONGO_CONNECTION_URL } from './environment'
@@ -27,6 +27,17 @@ async function main() {
     useUnifiedTopology: true,
   })
 
+  app.use(
+    (ctx: Koa.Context, next: Next): Promise<Next> =>
+      next().catch((err) => {
+        console.warn('API error', { error: err.message })
+        ctx.type = 'json'
+        ctx.status = 500
+        ctx.body = {
+          error: 'Internal Server Error',
+        }
+      }),
+  )
   app.use(getRoutes())
   app.listen(PORT)
   console.log(`🚀 Server ready at port ${PORT}`)
