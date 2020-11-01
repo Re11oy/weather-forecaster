@@ -24,7 +24,7 @@
     "fs-extra": "9.0.1",
     "koa": "2.13.0",
     "koa-router": "9.4.0",
-    "mongoose": "5.10.10",
+    "mongoose": "5.10.11",
     "node-fetch": "2.6.1"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@types/jest": "26.0.15",
     "@types/koa": "2.11.6",
     "@types/koa-router": "7.4.1",
-    "@types/mongoose": "5.7.36",
+    "@types/mongoose": "5.7.37",
     "@types/node": "14.14.6",
     "@types/node-fetch": "2.5.7",
     "@typescript-eslint/eslint-plugin": "4.5.0",
